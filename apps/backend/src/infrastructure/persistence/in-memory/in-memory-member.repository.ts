@@ -5,6 +5,7 @@ export class InMemoryMemberRepository implements MemberRepositoryPort {
   private members: Map<string, Member> = new Map();
 
   async save(member: Member): Promise<Member> {
+    await Promise.resolve();
     this.members.set(member.id, member);
     return member;
   }
@@ -13,6 +14,7 @@ export class InMemoryMemberRepository implements MemberRepositoryPort {
     organizationId: string,
     userId: string,
   ): Promise<Member | null> {
+    await Promise.resolve();
     for (const m of this.members.values()) {
       if (m.organizationId === organizationId && m.userId === userId) {
         return m;
@@ -25,6 +27,7 @@ export class InMemoryMemberRepository implements MemberRepositoryPort {
     workspaceId: string,
     userId: string,
   ): Promise<Member | null> {
+    await Promise.resolve();
     for (const m of this.members.values()) {
       if (m.workspaceId === workspaceId && m.userId === userId) {
         return m;
@@ -34,12 +37,14 @@ export class InMemoryMemberRepository implements MemberRepositoryPort {
   }
 
   async listByOrganization(organizationId: string): Promise<Member[]> {
+    await Promise.resolve();
     return Array.from(this.members.values()).filter(
       (m) => m.organizationId === organizationId,
     );
   }
 
   async listByWorkspace(workspaceId: string): Promise<Member[]> {
+    await Promise.resolve();
     return Array.from(this.members.values()).filter(
       (m) => m.workspaceId === workspaceId,
     );

@@ -25,7 +25,11 @@ describe('InviteMemberUseCase', () => {
       workspaceRepo,
       memberRepo,
     );
-    inviteMemberUseCase = new InviteMemberUseCase(orgRepo, workspaceRepo, memberRepo);
+    inviteMemberUseCase = new InviteMemberUseCase(
+      orgRepo,
+      workspaceRepo,
+      memberRepo,
+    );
   });
 
   it('should allow Organization Admin or Owner to invite a new member with role', async () => {

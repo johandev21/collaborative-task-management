@@ -13,9 +13,7 @@ export class GetOrganizationWorkspacesUseCase {
     private readonly memberRepository: MemberRepositoryPort,
   ) {}
 
-  async execute(
-    query: GetOrganizationWorkspacesQuery,
-  ): Promise<Workspace[]> {
+  async execute(query: GetOrganizationWorkspacesQuery): Promise<Workspace[]> {
     const member = await this.memberRepository.findByOrganizationAndUser(
       query.organizationId,
       query.requesterUserId,

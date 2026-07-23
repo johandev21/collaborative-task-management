@@ -17,6 +17,11 @@ import { CreateWorkspaceUseCase } from '../../../application/organization/use-ca
 import { InviteMemberUseCase } from '../../../application/organization/use-cases/invite-member.use-case';
 import { GetOrganizationWorkspacesUseCase } from '../../../application/organization/use-cases/get-organization-workspaces.use-case';
 
+function getErrorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  return String(err);
+}
+
 @Controller('organizations')
 export class OrganizationController {
   constructor(
@@ -38,8 +43,8 @@ export class OrganizationController {
         slug: dto.slug,
         ownerUserId: dto.ownerUserId,
       });
-    } catch (err: any) {
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+    } catch (err: unknown) {
+      throw new HttpException(getErrorMessage(err), HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -55,14 +60,15 @@ export class OrganizationController {
         slug: dto.slug,
         requesterUserId: dto.requesterUserId,
       });
-    } catch (err: any) {
-      if (err.message.includes('not authorized')) {
-        throw new HttpException(err.message, HttpStatus.FORBIDDEN);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      if (message.includes('not authorized')) {
+        throw new HttpException(message, HttpStatus.FORBIDDEN);
       }
-      if (err.message.includes('not found')) {
-        throw new HttpException(err.message, HttpStatus.NOT_FOUND);
+      if (message.includes('not found')) {
+        throw new HttpException(message, HttpStatus.NOT_FOUND);
       }
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -82,14 +88,15 @@ export class OrganizationController {
         organizationId: orgId,
         requesterUserId,
       });
-    } catch (err: any) {
-      if (err.message.includes('not a member')) {
-        throw new HttpException(err.message, HttpStatus.FORBIDDEN);
+    } catch (err: unknown) {
+      if (err instanceof HttpException) {
+        throw err;
       }
-      throw new HttpException(
-        err.message,
-        err.status || HttpStatus.BAD_REQUEST,
-      );
+      const message = getErrorMessage(err);
+      if (message.includes('not a member')) {
+        throw new HttpException(message, HttpStatus.FORBIDDEN);
+      }
+      throw new HttpException(message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -106,11 +113,12 @@ export class OrganizationController {
         role: dto.role,
         requesterUserId: dto.requesterUserId,
       });
-    } catch (err: any) {
-      if (err.message.includes('not authorized')) {
-        throw new HttpException(err.message, HttpStatus.FORBIDDEN);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      if (message.includes('not authorized')) {
+        throw new HttpException(message, HttpStatus.FORBIDDEN);
       }
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(message, HttpStatus.BAD_REQUEST);
     }
   }
 }

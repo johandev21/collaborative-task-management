@@ -32,10 +32,7 @@ export class CreateWorkspaceUseCase {
       command.requesterUserId,
     );
 
-    if (
-      !member ||
-      (member.role !== Role.Owner && member.role !== Role.Admin)
-    ) {
+    if (!member || (member.role !== Role.Owner && member.role !== Role.Admin)) {
       throw new Error('User is not authorized to create a workspace');
     }
 

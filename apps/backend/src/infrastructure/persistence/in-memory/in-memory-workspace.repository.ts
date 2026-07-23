@@ -5,15 +5,18 @@ export class InMemoryWorkspaceRepository implements WorkspaceRepositoryPort {
   private workspaces: Map<string, Workspace> = new Map();
 
   async save(workspace: Workspace): Promise<Workspace> {
+    await Promise.resolve();
     this.workspaces.set(workspace.id, workspace);
     return workspace;
   }
 
   async findById(id: string): Promise<Workspace | null> {
+    await Promise.resolve();
     return this.workspaces.get(id) ?? null;
   }
 
   async findByOrganizationId(organizationId: string): Promise<Workspace[]> {
+    await Promise.resolve();
     return Array.from(this.workspaces.values()).filter(
       (w) => w.organizationId === organizationId,
     );
@@ -23,6 +26,7 @@ export class InMemoryWorkspaceRepository implements WorkspaceRepositoryPort {
     organizationId: string,
     slug: string,
   ): Promise<Workspace | null> {
+    await Promise.resolve();
     const normalizedSlug = slug.toLowerCase();
     for (const w of this.workspaces.values()) {
       if (

@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { OrganizationController } from './organization.controller';
 import { OrganizationModule } from '../../../organization.module';
 import { Role } from '../../../domain/organization/models/role.enum';
-import { HttpStatus } from '@nestjs/common';
 
 describe('OrganizationController (Integration)', () => {
   let controller: OrganizationController;
